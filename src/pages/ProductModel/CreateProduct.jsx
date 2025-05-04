@@ -10,14 +10,14 @@ import {
   Input,
   Box,
   Backdrop,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import AddProductController from "../../Controller/ProductController";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ToastService from "../../util/validationAlerts/toastService";
 
-export default function ProductFormPopup({ open, onClose, type,productUid}) {
+export default function ProductFormPopup({ open, onClose, type, productUid }) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -28,8 +28,8 @@ export default function ProductFormPopup({ open, onClose, type,productUid}) {
     unit: "kg",
     is_available: "true",
     status: "Active",
-    imageFile: null,
-    imagePreview: ""
+    image_file: null,
+    image_preview: "",
   });
   const [loaderopen, setloaderOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -46,7 +46,7 @@ export default function ProductFormPopup({ open, onClose, type,productUid}) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -56,242 +56,256 @@ export default function ProductFormPopup({ open, onClose, type,productUid}) {
       const previewURL = URL.createObjectURL(file);
       setFormData((prev) => ({
         ...prev,
-        imageFile: file,
-        imagePreview: previewURL
+        image_file: file,
+        image_preview: previewURL,
       }));
     }
   };
 
   const handleSubmit = async () => {
-
     handleLoaderOpen();
-    
-    if(formData.name || formData.category || formData.price || formData.stock){
 
-        if(!editMode){            
+    if (
+      formData.name ||
+      formData.category ||
+      formData.price ||
+      formData.stock
+    ) {
+      if (!editMode) {
+        try {
+          let postData = {
+            name: formData.name,
+            description: formData.description,
+            category: formData.category,
+            price: formData.price,
+            discount_price: formData.discount_price,
+            stock: formData.stock,
+            unit: formData.unit,
+            is_available: formData.is_available,
+            status: formData.status,
+          };
 
-          try {           
-
-            let postData = {         
-                name: formData.name,
-                description: formData.description,
-                category: formData.category,
-                price: formData.price,
-                discount_price: formData.discount_price,
-                stock: formData.stock,
-                unit: formData.unit,
-                image_url: formData.imageFile,
-                is_available: formData.is_available,
-                status: formData.status,
-                is_active: true,
-                is_deleted: false
-              }
-           
-            const response = await AddProductController.postAddProduct(postData);
-           
-            const parseData = JSON.parse(response);            
-            
-            console.log(parseData,"productDataPost")
-      
-            if (parseData.status == "SUCCESS") {
-
-                handleLoaderClose();
-
-                ToastService.successmsg(parseData?.data?.message);
-
-                onClose();     
-                
-              
-            }else{
-                handleLoaderClose();
-            }
-          } catch (error) {
-            handleLoaderClose();
-            console.log("Error Fetching Region Data", error);
-          } 
-          
-         }else{
-
-            try {           
-
-                let postData = {         
-                    name: formData.name,
-                    description: formData.description,
-                    category: formData.category,
-                    price: formData.price,
-                    discount_price: formData.discount_price,
-                    stock: formData.stock,
-                    unit: formData.unit,
-                    image_url: formData.imageFile,
-                    is_available: formData.is_available,
-                    status: formData.status,
-                    is_active: true,
-                    is_deleted: false
-                  }
-
-                let product_uid = productUid;  
-
-                console.log(product_uid,"product_uid")
-               
-                const response = await AddProductController.editProductData(product_uid,postData);
-               
-                const parseData = JSON.parse(response);            
-                
-                console.log(parseData,"productDataPut")
-          
-                if (parseData.status == "SUCCESS") {                    
-    
-                    handleLoaderClose();
-    
-                    ToastService.successmsg(parseData?.data?.message);
-                    setTimeout(() => {
-                        setEditMode(false);
-    
-                    onClose();
-                      }, 3700);
-
-                        
-                    
-                  
-                }else{
-                    handleLoaderClose();
-                }
-              } catch (error) {
-                handleLoaderClose();
-                console.log("Error Fetching Region Data", error);
-              } 
-
+          if (formData.image_file) {
+            postData = {
+              ...postData,
+              image_file: formData.image_file,
+            };
           }
-          
-        } else{
 
-            ToastService.successmsg("Please Fill The Mandatory Data");
+          const postFormData = new FormData();
+          Object.keys(postData).forEach((key) => {
+            postFormData.append(key, postData[key]);
+          });
 
-        } 
-    
-    
+          const response = await AddProductController.postAddProduct(postFormData);
+
+          const parseData = JSON.parse(response);
+
+          console.log(parseData, "productDataPost");
+
+          if (parseData.status == "SUCCESS") {
+            handleLoaderClose();
+
+            ToastService.successmsg(parseData?.data?.message);
+
+            onClose();
+          } else {
+            handleLoaderClose();
+          }
+        } catch (error) {
+          handleLoaderClose();
+          console.log("Error Fetching Region Data", error);
+        }
+      } else {
+        try {
+          let postData = {
+            name: formData.name,
+            description: formData.description,
+            category: formData.category,
+            price: formData.price,
+            discount_price: formData.discount_price,
+            stock: formData.stock,
+            unit: formData.unit,
+            is_available: formData.is_available,
+            status: formData.status,
+          };
+
+          if (formData.image_file) {
+            postData = {
+              ...postData,
+              image_file: formData.image_file,
+            };
+          }
+
+          const postFormData = new FormData();
+          Object.keys(postData).forEach((key) => {
+            postFormData.append(key, postData[key]);
+          });
+
+
+          let product_uid = productUid;
+
+          console.log(product_uid, "product_uid");
+
+          const response = await AddProductController.editProductData(
+            product_uid,
+            postFormData
+          );
+
+          const parseData = JSON.parse(response);
+
+          console.log(parseData, "productDataPut");
+
+          if (parseData.status == "SUCCESS") {
+            handleLoaderClose();
+
+            ToastService.successmsg(parseData?.data?.message);
+            setTimeout(() => {
+              setEditMode(false);
+
+              onClose();
+            }, 3700);
+          } else {
+            handleLoaderClose();
+          }
+        } catch (error) {
+          handleLoaderClose();
+          console.log("Error Fetching Region Data", error);
+        }
+      }
+    } else {
+      ToastService.successmsg("Please Fill The Mandatory Data");
+    }
   };
 
   const fetchTheEditProduct = async (uid) => {
-
     try {
+      const productUid = uid;
 
-        const productUid = uid;
-           
-        const response = await AddProductController.getViewAndEditProduct(productUid,"");
-       
-        const parseData = JSON.parse(response);
+      const response = await AddProductController.getViewAndEditProduct(
+        productUid,
+        ""
+      );
 
-        let productData = parseData?.data?.data;
-        
-        console.log(productData,"productDataEdit")
-  
-        if (parseData.status == "SUCCESS") {
+      const parseData = JSON.parse(response);
 
-            setFormData({
-                name: productData?.name,
-                description: productData?.description,
-                category: productData?.category,
-                price: productData?.price,
-                discount_price: productData?.discount_price,
-                stock: productData?.stock,
-                unit: productData?.unit,
-                is_available: productData?.is_available,
-                status: productData?.status,
-                imageFile: null, // we don't re-upload existing image
-                imagePreview: productData?.image_url
-    
-                
-              })
-          
-        }
-      } catch (error) {
-        console.log("Error Fetching Region Data", error);
+      let productData = parseData?.data?.data;
+
+      console.log(productData, "productDataEdit");
+
+      if (parseData.status == "SUCCESS") {
+        setFormData({
+          name: productData?.name,
+          description: productData?.description,
+          category: productData?.category,
+          price: productData?.price,
+          discount_price: productData?.discount_price,
+          stock: productData?.stock,
+          unit: productData?.unit,
+          is_available: productData?.is_available,
+          status: productData?.status,
+          image_file: null, // we don't re-upload existing image
+          image_preview: productData?.base64Image,
+        });
       }
-
-  }
+    } catch (error) {
+      console.log("Error Fetching Region Data", error);
+    }
+  };
 
   useEffect(() => {
-
-    if((type === "EDIT_PRODUCT") && productUid){
-        setEditMode(true);
-        fetchTheEditProduct(productUid);
+    if (type === "EDIT_PRODUCT" && productUid) {
+      setEditMode(true);
+      fetchTheEditProduct(productUid);
     }
-
-  },[productUid])
-
-
+  }, [productUid]);
 
   return (
     <>
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Add / Edit Product</DialogTitle>
-      <DialogContent dividers>
-        <Grid container spacing={2}>
-          {/* Text Fields */}
-          {[
-            { name: "name", label: "Product Name" },
-            { name: "description", label: "Description" },
-            { name: "category", label: "Category" },
-            { name: "price", label: "Price", type: "number" },
-            { name: "discount_price", label: "Discount Price", type: "number" },
-            { name: "stock", label: "Stock", type: "number" },
-            { name: "unit", label: "Unit" },
-            { name: "is_available", label: "Available (true/false)" },
-            { name: "status", label: "Status (Active/Inactive)" }
-          ].map((field) => (
-            <Grid item xs={12} sm={6} key={field.name}>
-                <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
-   {field.label}
-  </label>
-              <TextField
-                fullWidth  
-                size="small"              
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleChange}
-                type={field.type || "text"}
-              />
-            </Grid>
-          ))}
+      <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+        <DialogTitle>Add / Edit Product</DialogTitle>
+        <DialogContent dividers>
+          <Grid container spacing={2}>
+            {/* Text Fields */}
+            {[
+              { name: "name", label: "Product Name" },
+              { name: "description", label: "Description" },
+              { name: "category", label: "Category" },
+              { name: "price", label: "Price", type: "number" },
+              {
+                name: "discount_price",
+                label: "Discount Price",
+                type: "number",
+              },
+              { name: "stock", label: "Stock", type: "number" },
+              { name: "unit", label: "Unit" },
+              { name: "is_available", label: "Available (true/false)" },
+              { name: "status", label: "Status (Active/Inactive)" },
+            ].map((field) => (
+              <Grid item xs={12} sm={6} key={field.name}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    fontWeight: "500",
+                  }}
+                >
+                  {field.label}
+                </label>
+                <TextField
+                  fullWidth
+                  size="small"
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  type={field.type || "text"}
+                />
+              </Grid>
+            ))}
 
-          {/* Image Upload */}
-          <Grid item xs={12} sm={6}>
-  <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
-    Upload Image
-  </label>
-  <Input
-    type="file"
-    onChange={handleImageChange}
-    inputProps={{ accept: "image/*" }}
-    fullWidth
-  />
-  {formData.imagePreview && (
-    <img
-      src={formData.imagePreview}
-      alt="Preview"
-      style={{
-        marginTop: "10px",
-        height: "180px",
-        width: "100%",
-        objectFit: "cover",
-        borderRadius: "8px"
-      }}
-    />
-  )}
-</Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="error" variant="outlined">
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} color="primary" variant="contained">
-          Submit
-        </Button>
-      </DialogActions>
-    </Dialog>
-    <Box display={"flex"} justifyContent={"center"}>
+            {/* Image Upload */}
+            <Grid item xs={12} sm={6}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "8px",
+                  fontWeight: "500",
+                }}
+              >
+                Upload Image
+              </label>
+              <Input
+                type="file"
+                onChange={handleImageChange}
+                inputProps={{ accept: "image/*" }}
+                fullWidth
+              />
+              {formData.image_preview && (
+                <img
+                  src={formData.image_preview}
+                  alt="Preview"
+                  style={{
+                    marginTop: "10px",
+                    height: "180px",
+                    width: "100%",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                />
+              )}
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="error" variant="outlined">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} color="primary" variant="contained">
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Box display={"flex"} justifyContent={"center"}>
         <ToastContainer style={{ width: "auto" }} />
       </Box>
       <Backdrop
@@ -300,6 +314,6 @@ export default function ProductFormPopup({ open, onClose, type,productUid}) {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      </>
+    </>
   );
 }

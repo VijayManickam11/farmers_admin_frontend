@@ -6,9 +6,9 @@ let BASE_URL;
 if(instance == "LOCAL") {
   BASE_URL = "http://localhost:8083"; 
 } else if(instance == "DEV") {
-  BASE_URL = "https://dev-services-app-inspection-com.azurewebsites.net";    
+  BASE_URL = "https://";    
 } else if(instance == "UAT") {
-  BASE_URL = "https://inspection-uat-api-ctemd9b2aeg8hmd8.uaenorth-01.azurewebsites.net";
+  BASE_URL = "https://";
 }
 
 let WEB_URL;
@@ -16,9 +16,9 @@ let WEB_URL;
 if(instance == "LOCAL") {
   WEB_URL = "http://localhost:8083"; 
 } else if(instance == "DEV") {
-  WEB_URL = "https://icy-flower-0c748ae0f.5.azurestaticapps.net";    
+  WEB_URL = "https://";    
 } else if(instance == "UAT") {
-  WEB_URL = "https://nice-wave-05de65000.5.azurestaticapps.net";
+  WEB_URL = "https://";
 }
 
 export const apiConfig = {

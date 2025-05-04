@@ -2,7 +2,7 @@ export const apiHdrDefValue = {
     APPLICATION_JSON: "application/json",
     REFERRED_BY: "WEB",
     FORM_URLENCODED: "application/x-www-form-urlencoded",
-    // FORM_URLENCODED: "multipart/form-data",
+    FORM_DATA: "multipart/form-data",
 };
 
 export const apiHttpStatus = {

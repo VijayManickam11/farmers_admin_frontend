@@ -6,7 +6,7 @@ let AddProductController = {
   
 
   async postAddProduct(data) {
-    return await ApiService.callPOST(apiConfig.API_VERSION_1, apiEndPoint.POST_PRODUCT, "", data);
+    return await ApiService.callFormPOST(apiConfig.API_VERSION_1, apiEndPoint.POST_PRODUCT, "", data);
   },
 
   async getProductListData(data) {
@@ -18,7 +18,7 @@ let AddProductController = {
   },
 
   async editProductData(id,data) {
-    return await ApiService.callPUT(apiConfig.API_VERSION_1, apiEndPoint.PUT_PRODUCT_DATA.replace(":product_uid",id), "", data || "");
+    return await ApiService.callFormPUT(apiConfig.API_VERSION_1, apiEndPoint.PUT_PRODUCT_DATA.replace(":product_uid",id), "", data || "");
   },
 
   async deleteProductList(id,data) { 
