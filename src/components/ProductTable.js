@@ -190,7 +190,7 @@ export default function ProductTable() {
           <EditIcon />
         </IconButton>
         <IconButton color="error" 
-        onClick={() => deleteForm(value._id)}
+        onClick={() => deleteForm(value.product_uid)}
         >
           <DeleteIcon />
         </IconButton>
