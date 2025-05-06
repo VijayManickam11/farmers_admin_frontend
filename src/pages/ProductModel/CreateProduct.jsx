@@ -11,6 +11,8 @@ import {
   Box,
   Backdrop,
   CircularProgress,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import AddProductController from "../../Controller/ProductController";
 import { ToastContainer, toast } from "react-toastify";
@@ -26,8 +28,8 @@ export default function ProductFormPopup({ open, onClose, type, productUid }) {
     discount_price: "",
     stock: "",
     unit: "kg",
-    is_available: "true",
-    status: "Active",
+    is_available: "false",
+    status: "",
     image_file: null,
     image_preview: "",
   });
@@ -238,9 +240,7 @@ export default function ProductFormPopup({ open, onClose, type, productUid }) {
                 type: "number",
               },
               { name: "stock", label: "Stock", type: "number" },
-              { name: "unit", label: "Unit" },
-              { name: "is_available", label: "Available (true/false)" },
-              { name: "status", label: "Status (Active/Inactive)" },
+              { name: "unit", label: "Unit" },              
             ].map((field) => (
               <Grid item xs={12} sm={6} key={field.name}>
                 <label
@@ -263,8 +263,50 @@ export default function ProductFormPopup({ open, onClose, type, productUid }) {
               </Grid>
             ))}
 
-            {/* Image Upload */}
-            <Grid item xs={12} sm={6}>
+            {/* Checkbox for is_available */}
+<Grid item xs={12} sm={6} >
+  <Box  mt={3.5}>
+  <FormControlLabel
+    control={
+      <Checkbox
+        checked={formData.is_available === "true"}
+        onChange={(e) =>
+          setFormData((prev) => ({
+            ...prev,
+            is_available: e.target.checked ? "true" : "false",
+          }))
+        }
+      />
+    }
+    label="Available"
+  />
+  </Box>
+</Grid>
+
+{/* Checkbox for status */}
+<Grid item xs={12} sm={6}>
+<Box  mt={3.5}>
+  <FormControlLabel
+    control={
+      <Checkbox
+        checked={formData.status === "Active"}
+        onChange={(e) =>
+          setFormData((prev) => ({
+            ...prev,
+            status: e.target.checked ? "Active" : "Inactive",
+          }))
+        }
+      />
+    }
+    label={`Status ${formData.status === "Active" ? "Active" : "Inactive"}`}
+  />
+  </Box>
+</Grid>
+
+           
+          </Grid>
+           {/* Image Upload */}
+           <Box sx={{width:"50%"}} mt={1}>
               <label
                 style={{
                   display: "block",
@@ -293,8 +335,7 @@ export default function ProductFormPopup({ open, onClose, type, productUid }) {
                   }}
                 />
               )}
-            </Grid>
-          </Grid>
+            </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="error" variant="outlined">
