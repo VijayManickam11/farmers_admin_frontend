@@ -7,6 +7,7 @@ import { useState } from 'react';
 export default function ProductPage() {
 
     const [open, setOpen] = useState(false);
+    const [count, setCount] = useState(false);
 
   
   return (
@@ -23,12 +24,12 @@ export default function ProductPage() {
       
       
       </Box>
-      <ProductTable />
+      <ProductTable open={open} count={count} />
       <ProductFormPopup
         open={open}
         onClose={() => setOpen(false)}
         type="ADD_PRODUCT"
-       
+        setCount={setCount}
       />
     </div>
   );

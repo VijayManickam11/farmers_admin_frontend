@@ -19,7 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ToastService from "../../util/validationAlerts/toastService";
 
-export default function ProductFormPopup({ open, onClose, type, productUid }) {
+export default function ProductFormPopup({ open, onClose, type, productUid, setCount }) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -111,6 +111,7 @@ export default function ProductFormPopup({ open, onClose, type, productUid }) {
             ToastService.successmsg(parseData?.data?.message);
 
             onClose();
+            setCount((prev) => prev + 1);
           } else {
             handleLoaderClose();
           }

@@ -37,7 +37,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function ProductTable() {
+export default function ProductTable({count}) {
   const navigate = useNavigate();
 
   const [geTheListingData, setGeTheListingData] = useState([]);
@@ -70,7 +70,7 @@ export default function ProductTable() {
 
   useEffect(() => {
     getTheProductDataList();
-  }, []);
+  }, [count]);
 
   const handleDelete = async (productUid) => {
     try {
