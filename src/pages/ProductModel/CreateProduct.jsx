@@ -28,6 +28,7 @@ export default function ProductFormPopup({ open, onClose, type, productUid, setC
     discount_price: "",
     stock: "",
     unit: "kg",
+    gst:"",
     is_available: "false",
     status: "",
     image_file: null,
@@ -83,6 +84,7 @@ export default function ProductFormPopup({ open, onClose, type, productUid, setC
             discount_price: formData.discount_price,
             stock: formData.stock,
             unit: formData.unit,
+            gst_rate:formData.gst,
             is_available: formData.is_available,
             status: formData.status,
           };
@@ -129,6 +131,7 @@ export default function ProductFormPopup({ open, onClose, type, productUid, setC
             discount_price: formData.discount_price,
             stock: formData.stock,
             unit: formData.unit,
+            gst_rate: formData.gst,
             is_available: formData.is_available,
             status: formData.status,
           };
@@ -205,6 +208,7 @@ export default function ProductFormPopup({ open, onClose, type, productUid, setC
           discount_price: productData?.discount_price,
           stock: productData?.stock,
           unit: productData?.unit,
+          gst:productData?.gst_rate,
           is_available: productData?.is_available,
           status: productData?.status,
           image_file: null, // we don't re-upload existing image
@@ -242,6 +246,7 @@ export default function ProductFormPopup({ open, onClose, type, productUid, setC
               },
               { name: "stock", label: "Stock", type: "number" },
               { name: "unit", label: "Unit" },              
+              { name: "gst", label: "GST", type: "number" },              
             ].map((field) => (
               <Grid item xs={12} sm={6} key={field.name}>
                 <label

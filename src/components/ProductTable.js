@@ -148,6 +148,7 @@ export default function ProductTable({count}) {
               <StyledTableCell align="left">Discount Price</StyledTableCell>
               <StyledTableCell align="left">Stock</StyledTableCell>
               <StyledTableCell align="left">Unit</StyledTableCell>
+              <StyledTableCell align="left">GST</StyledTableCell>
               <StyledTableCell align="left">Image</StyledTableCell>
               <StyledTableCell align="left">Available</StyledTableCell>
               <StyledTableCell align="left">Status</StyledTableCell>
@@ -170,6 +171,7 @@ export default function ProductTable({count}) {
                 </StyledTableCell>
                 <StyledTableCell align="left">{value.stock}</StyledTableCell>
                 <StyledTableCell align="left">{value.unit}</StyledTableCell>
+                <StyledTableCell align="left">{value.gst_rate}</StyledTableCell>
                 <StyledTableCell align="left">{"Img"}</StyledTableCell>
                 <StyledTableCell align="left">
                   {value.is_available == true ? "Yes" : "No"}
